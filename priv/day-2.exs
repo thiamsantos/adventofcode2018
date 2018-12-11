@@ -14,7 +14,7 @@ defmodule Checksum do
     |> Enum.reject(fn {key, _value} -> key != 2 and key != 3 end)
     |> Map.new()
     |> Map.values()
-    |> Enum.reduce(1, & &1 * &2)
+    |> Enum.reduce(1, &(&1 * &2))
   end
 
   def count_ocurrences(list) do
@@ -46,15 +46,17 @@ defmodule CommonLetters do
   end
 
   defp check_common(left_box_id, right_box_id) do
-    letters = left_box_id
-    |> Enum.zip(right_box_id)
-    |> Enum.reduce({[], []}, fn {left_letter, right_letter}, {equal_letters, different_letters} ->
-      if left_letter == right_letter do
-        {[left_letter | equal_letters], different_letters}
-      else
-        {equal_letters, [left_letter | different_letters]}
-      end
-    end)
+    letters =
+      left_box_id
+      |> Enum.zip(right_box_id)
+      |> Enum.reduce({[], []}, fn {left_letter, right_letter},
+                                  {equal_letters, different_letters} ->
+        if left_letter == right_letter do
+          {[left_letter | equal_letters], different_letters}
+        else
+          {equal_letters, [left_letter | different_letters]}
+        end
+      end)
 
     case letters do
       {equal, [_]} -> Enum.reverse(equal)
