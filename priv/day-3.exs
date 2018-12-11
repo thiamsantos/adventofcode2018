@@ -30,16 +30,13 @@ defmodule FabricClaims do
       |> List.flatten()
       |> MapSet.new()
 
+    one_claim =
+      one_claim
+      |> List.flatten()
+      |> MapSet.new()
+
     one_claim
-    |> List.flatten()
-    |> MapSet.new()
-    |> Enum.reduce(MapSet.new(), fn x, acc ->
-      if x in multiple_claims do
-        MapSet.delete(acc, x)
-      else
-        MapSet.put(acc, x)
-      end
-    end)
+    |> MapSet.difference(multiple_claims)
     |> MapSet.to_list()
     |> List.first()
   end
