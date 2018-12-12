@@ -26,18 +26,19 @@ defmodule Day4 do
   end
 
   def part2 do
-    {minute, id, _times} = read_shifts()
-    |> Enum.group_by(fn {id, _range} -> id end)
-    |> Enum.flat_map(fn {id, shifts} ->
-      shifts
-      |> Enum.flat_map(fn {_id, range} -> Enum.to_list(range) end)
-      |> Enum.reduce(%{}, fn x, acc ->
-        Map.update(acc, x, 1, &(&1 + 1))
+    {minute, id, _times} =
+      read_shifts()
+      |> Enum.group_by(fn {id, _range} -> id end)
+      |> Enum.flat_map(fn {id, shifts} ->
+        shifts
+        |> Enum.flat_map(fn {_id, range} -> Enum.to_list(range) end)
+        |> Enum.reduce(%{}, fn x, acc ->
+          Map.update(acc, x, 1, &(&1 + 1))
+        end)
+        |> Enum.map(fn {minute, times} -> {minute, id, times} end)
       end)
-      |> Enum.map(fn {minute, times} -> {minute, id, times} end)
-    end)
-    |> Enum.sort_by(fn {_minute, _id, times} -> times end, &>=/2)
-    |> List.first()
+      |> Enum.sort_by(fn {_minute, _id, times} -> times end, &>=/2)
+      |> List.first()
 
     id * minute
   end
